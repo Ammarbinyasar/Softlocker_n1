@@ -5,14 +5,14 @@ import 'package:vishayam/home/homepage.dart';
 
 final _Formkey = GlobalKey<FormState>();
 
-class Verify extends StatefulWidget {
-  const Verify({super.key});
+class Verifyacc extends StatefulWidget {
+  const Verifyacc({super.key});
 
   @override
-  State<Verify> createState() => _VerifyState();
+  State<Verifyacc> createState() => _VerifyaccState();
 }
 
-class _VerifyState extends State<Verify> {
+class _VerifyaccState extends State<Verifyacc> {
   final _verifycontroller = TextEditingController();
 
   @override

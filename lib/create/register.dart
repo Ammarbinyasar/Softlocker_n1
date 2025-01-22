@@ -104,7 +104,7 @@ class Register extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(19),
                                       ),
                                     ),
-                                    child: Text('Login'),
+                                    child: Text('Create Account'),
                                   ),
                                 ],
                               ),

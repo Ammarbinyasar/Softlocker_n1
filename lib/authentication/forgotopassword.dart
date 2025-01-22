@@ -3,8 +3,48 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:vishayam/authentication/otp.dart';
 
-class forgott extends StatelessWidget {
+final _formkey = GlobalKey<FormState>();
+
+class forgott extends StatefulWidget {
   const forgott({super.key});
+
+  @override
+  State<forgott> createState() => _forgottState();
+}
+
+class _forgottState extends State<forgott> {
+  final _emailcontroller = TextEditingController();
+
+  movetotp(BuildContext context) {
+    if (_formkey.currentState!.validate()) {
+      setState(() {});
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OtpVerification(),
+        ),
+      );
+    }
+  }
+
+  String? validateEmail(String? email) {
+    if (email == null || email.isEmpty) {
+      return 'Email cannot be empty';
+    }
+
+    // Check if the email contains an "@" symbol
+    if (!email.contains('@')) {
+      return 'Email must contain "@" symbol';
+    }
+
+    // Check for valid email structure using a regular expression
+    RegExp emailRegex = RegExp(r'^[\w.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
+    if (!emailRegex.hasMatch(email)) {
+      return 'Please enter a valid email address';
+    }
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,31 +119,41 @@ class forgott extends StatelessWidget {
                           //whitebox
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Container(
-                              width: 275,
-                              alignment: Alignment.centerLeft,
-                              decoration: BoxDecoration(
-                                color: Color(0x00fff5f5).withOpacity(1.0),
-                                borderRadius: BorderRadius.circular(19),
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'E-mail', // Placeholder text
-                                  hintStyle: TextStyle(
-                                      color: const Color.fromARGB(255, 129, 129,
-                                          129)), // Style of the hint text
-                                  border: InputBorder
-                                      .none, // Remove the default underline border
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 16.0), // Add padding
+                            child: Form(
+                              key: _formkey,
+                              child: Container(
+                                width: 275,
+                                alignment: Alignment.centerLeft,
+                                decoration: BoxDecoration(
+                                  color: Color(0x00fff5f5).withOpacity(1.0),
+                                  borderRadius: BorderRadius.circular(19),
                                 ),
-                                style: TextStyle(
-                                  color:
-                                      Colors.black, // Style for the input text
-                                  fontSize: 16.0,
+                                child: TextFormField(
+                                  validator: validateEmail,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  controller: _emailcontroller,
+                                  decoration: InputDecoration(
+                                    hintText: 'E-mail', // Placeholder text
+                                    hintStyle: TextStyle(
+                                        color: const Color.fromARGB(
+                                            255,
+                                            129,
+                                            129,
+                                            129)), // Style of the hint text
+                                    border: InputBorder
+                                        .none, // Remove the default underline border
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 16.0), // Add padding
+                                  ),
+                                  style: TextStyle(
+                                    color: Colors
+                                        .black, // Style for the input text
+                                    fontSize: 16.0,
+                                  ),
+                                  keyboardType: TextInputType
+                                      .emailAddress, // Keyboard optimized for email input
                                 ),
-                                keyboardType: TextInputType
-                                    .emailAddress, // Keyboard optimized for email input
                               ),
                             ),
                           ),
@@ -128,11 +178,12 @@ class forgott extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OtpVerification()),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => OtpVerification()),
+                        // );
+                        movetotp(context);
                       },
                       style: ElevatedButton.styleFrom(
                           foregroundColor:

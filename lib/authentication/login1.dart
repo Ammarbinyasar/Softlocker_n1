@@ -5,8 +5,69 @@ import 'package:vishayam/authentication/forgotopassword.dart';
 import 'package:vishayam/authentication/verify.dart';
 import 'package:vishayam/create/register.dart';
 
-class loginscreen extends StatelessWidget {
+final _formkey = GlobalKey<FormState>();
+
+class loginscreen extends StatefulWidget {
   const loginscreen({super.key});
+
+  @override
+  State<loginscreen> createState() => _loginscreenState();
+}
+
+class _loginscreenState extends State<loginscreen> {
+  final _emailcontroller = TextEditingController();
+  final _passwordcontroller = TextEditingController();
+
+  String? validateEmail(String? email) {
+    if (email == null || email.isEmpty) {
+      return 'Email cannot be empty';
+    }
+
+    // Check if the email contains an "@" symbol
+    if (!email.contains('@')) {
+      return 'Email must contain "@" symbol';
+    }
+
+    // Check for valid email structure using a regular expression
+    RegExp emailRegex = RegExp(r'^[\w.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
+    if (!emailRegex.hasMatch(email)) {
+      return 'Please enter a valid email address';
+    }
+
+    return null;
+  }
+
+  String? validatePassword(String? password) {
+    if (password == null || password.isEmpty) {
+      return 'Password cannot be empty';
+    }
+
+    // Check minimum length
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+
+    // Check for uppercase, lowercase, number, and special character
+    RegExp uppercaseRegex = RegExp(r'[A-Z]');
+    RegExp lowercaseRegex = RegExp(r'[a-z]');
+    RegExp numberRegex = RegExp(r'\d');
+    RegExp specialCharRegex = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+
+    if (!uppercaseRegex.hasMatch(password)) {
+      return 'At least one uppercase letter';
+    }
+    if (!lowercaseRegex.hasMatch(password)) {
+      return 'At least one lowercase letter';
+    }
+    if (!numberRegex.hasMatch(password)) {
+      return 'At least one number';
+    }
+    if (!specialCharRegex.hasMatch(password)) {
+      return 'At least one special character';
+    }
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,190 +157,211 @@ class loginscreen extends StatelessWidget {
                           height: 30,
                         ),
                         //form
-                        Column(
-                          children: [
-                            //email
-                            Container(
-                              alignment: Alignment.center,
-                              width: 314,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                color: Color(0x000d4671).withOpacity(1.0),
-                                borderRadius: BorderRadius.circular(19),
-                              ),
-                              child: Stack(
+                        Form(
+                          key: _formkey,
+                          child: Column(
+                            children: [
+                              //email
+                              Container(
                                 alignment: Alignment.center,
-                                children: [
-                                  //whitebox
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      width: 275,
+                                width: 314,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  color: Color(0x000d4671).withOpacity(1.0),
+                                  borderRadius: BorderRadius.circular(19),
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    //whitebox
+                                    Align(
                                       alignment: Alignment.centerLeft,
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Color(0x00fff5f5).withOpacity(1.0),
-                                        borderRadius: BorderRadius.circular(19),
-                                      ),
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              'Enter your email', // Placeholder text
-                                          hintStyle: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255,
-                                                  129,
-                                                  129,
-                                                  129)), // Style of the hint text
-                                          border: InputBorder
-                                              .none, // Remove the default underline border
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 16.0), // Add padding
+                                      child: Container(
+                                        width: 275,
+                                        alignment: Alignment.centerLeft,
+                                        decoration: BoxDecoration(
+                                          color: Color(0x00fff5f5)
+                                              .withOpacity(1.0),
+                                          borderRadius:
+                                              BorderRadius.circular(19),
                                         ),
-                                        style: TextStyle(
-                                          color: Colors
-                                              .black, // Style for the input text
-                                          fontSize: 16.0,
+                                        child: TextFormField(
+                                          controller: _emailcontroller,
+                                          validator: validateEmail,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+
+                                          decoration: InputDecoration(
+                                            hintText:
+                                                'Enter your email', // Placeholder text
+                                            hintStyle: TextStyle(
+                                                color: const Color.fromARGB(
+                                                    255,
+                                                    129,
+                                                    129,
+                                                    129)), // Style of the hint text
+                                            border: InputBorder
+                                                .none, // Remove the default underline border
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        16.0), // Add padding
+                                          ),
+                                          style: TextStyle(
+                                            color: Colors
+                                                .black, // Style for the input text
+                                            fontSize: 16.0,
+                                          ),
+                                          keyboardType: TextInputType
+                                              .emailAddress, // Keyboard optimized for email input
                                         ),
-                                        keyboardType: TextInputType
-                                            .emailAddress, // Keyboard optimized for email input
                                       ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment
-                                        .centerRight, // Aligns the SVG to the rightmost
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right:
-                                              10.0), // Add padding to the right
-                                      child: SvgPicture.asset(
-                                        'assets/login/email.svg',
-                                        height: 24, // Adjust SVG size as needed
-                                        width: 24,
+                                    Align(
+                                      alignment: Alignment
+                                          .centerRight, // Aligns the SVG to the rightmost
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            right:
+                                                10.0), // Add padding to the right
+                                        child: SvgPicture.asset(
+                                          'assets/login/email.svg',
+                                          height:
+                                              24, // Adjust SVG size as needed
+                                          width: 24,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            //password
-                            Container(
-                              alignment: Alignment.center,
-                              width: 314,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                color: Color(0x000d4671).withOpacity(1.0),
-                                borderRadius: BorderRadius.circular(19),
+                              const SizedBox(
+                                height: 30,
                               ),
-                              child: Stack(
+                              //password
+                              Container(
                                 alignment: Alignment.center,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      width: 275,
+                                width: 314,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  color: Color(0x000d4671).withOpacity(1.0),
+                                  borderRadius: BorderRadius.circular(19),
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Align(
                                       alignment: Alignment.centerLeft,
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Color(0x00fff5f5).withOpacity(1.0),
-                                        borderRadius: BorderRadius.circular(19),
-                                      ),
-                                      child: TextField(
-                                        obscureText: true,
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              'Enter your Password', // Placeholder text
-                                          hintStyle: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255,
-                                                  129,
-                                                  129,
-                                                  129)), // Style of the hint text
-                                          border: InputBorder
-                                              .none, // Remove the default underline border
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 16.0), // Add padding
+                                      child: Container(
+                                        width: 275,
+                                        alignment: Alignment.centerLeft,
+                                        decoration: BoxDecoration(
+                                          color: Color(0x00fff5f5)
+                                              .withOpacity(1.0),
+                                          borderRadius:
+                                              BorderRadius.circular(19),
                                         ),
-                                        style: TextStyle(
-                                          color: Colors
-                                              .black, // Style for the input text
-                                          fontSize: 16.0,
+                                        child: TextFormField(
+                                          controller: _passwordcontroller,
+                                          validator: validatePassword,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          obscureText: true,
+                                          decoration: InputDecoration(
+                                            hintText:
+                                                'Enter your Password', // Placeholder text
+                                            hintStyle: TextStyle(
+                                                color: const Color.fromARGB(
+                                                    255,
+                                                    129,
+                                                    129,
+                                                    129)), // Style of the hint text
+                                            border: InputBorder
+                                                .none, // Remove the default underline border
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    horizontal:
+                                                        16.0), // Add padding
+                                          ),
+                                          style: TextStyle(
+                                            color: Colors
+                                                .black, // Style for the input text
+                                            fontSize: 16.0,
+                                          ),
+                                          keyboardType: TextInputType
+                                              .visiblePassword, // Keyboard optimized for password input
                                         ),
-                                        keyboardType: TextInputType
-                                            .visiblePassword, // Keyboard optimized for password input
                                       ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment
-                                        .centerRight, // Aligns the SVG to the rightmost
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right:
-                                              10.0), // Add padding to the right
-                                      child: SvgPicture.asset(
-                                        'assets/login/pass.svg',
-                                        height: 24, // Adjust SVG size as needed
-                                        width: 24,
+                                    Align(
+                                      alignment: Alignment
+                                          .centerRight, // Aligns the SVG to the rightmost
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            right:
+                                                10.0), // Add padding to the right
+                                        child: SvgPicture.asset(
+                                          'assets/login/pass.svg',
+                                          height:
+                                              24, // Adjust SVG size as needed
+                                          width: 24,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => forgott()),
-                                  );
-                                },
-                                child: Text(
-                                  'Forgot Password?',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 7, 7,
-                                        7), // Color of the text (customize as needed)
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w500,
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => forgott()),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 7, 7,
+                                          7), // Color of the text (customize as needed)
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Verify()),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  foregroundColor:
-                                      const Color(0x00ffffff).withOpacity(1.0),
-                                  backgroundColor: const Color(0x000d4671)
-                                      .withOpacity(1.0), // Text color
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 20),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(19))
-                                  // Shadow effect
-                                  ),
-                              child: Text('Login'),
-                            )
-                          ],
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  _formkey.currentState!.validate();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Verify()),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    foregroundColor: const Color(0x00ffffff)
+                                        .withOpacity(1.0),
+                                    backgroundColor: const Color(0x000d4671)
+                                        .withOpacity(1.0), // Text color
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 50, vertical: 20),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(19))
+                                    // Shadow effect
+                                    ),
+                                child: Text('Login'),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     )),

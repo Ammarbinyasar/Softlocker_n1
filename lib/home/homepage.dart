@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'empty_state.dart';
 // import 'folder_details_widget.dart';
 // import 'file_list_screen.dart';
-// import 'profile_screen.dart'; // Import ProfileScreen
+import 'profile_screen.dart'; // Import ProfileScreen
 
 class HomeFolderScreen extends StatelessWidget {
   const HomeFolderScreen({super.key});
@@ -21,7 +21,12 @@ class HomeFolderScreen extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
             icon: Icon(
               Icons.account_circle,
               size: 42,
