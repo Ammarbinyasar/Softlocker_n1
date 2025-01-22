@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'package:vishayam/home/homepage.dart';
+import 'package:vishayam/onboarding/onboarding.dart';
 
 final _Formkey = GlobalKey<FormState>();
 
@@ -160,8 +160,7 @@ class _VerifyaccState extends State<Verifyacc> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => HomeFolderScreen()),
+                        MaterialPageRoute(builder: (context) => onboard()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
